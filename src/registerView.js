@@ -9,15 +9,17 @@ export default class loginView extends Component {
     this.state = {
       email: "",
       password: "",
+      user: "",
+      confirmPassword: "",
     }
   }
 
   validateInput = () => {
-    const { email, password } = this.state;
+    const { email, password, user, confirmPassword } = this.state;
     const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
     const passwordRegex =/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
 
-    if (!email || !password) {
+    if (!email || !password || !user || !confirmPassword) {
       Alert.alert("Aviso", "Asegurate de rellenar todos los campos.");
       return false;
     }
@@ -32,6 +34,11 @@ export default class loginView extends Component {
       setTimeout(() => {
         Alert.alert("Aviso", "La contraseña debe de contener al menos 8 carácteres, mayúsculas, minúsculas y al menos 1 carácter especial.");
       }, 1000);
+      return false;
+    }
+
+    if (password != confirmPassword){
+      Alert.alert("Aviso", "Las contraseñas ingresadas no coinciden.");
       return false;
     }
 
@@ -52,10 +59,6 @@ export default class loginView extends Component {
   render(){
     return (
       <View style={styles.container}>
-        <Image
-         style={styles.imagen}
-         source={require('./assets/img1.jpg')}
-        ></Image>
         <Text>Correo</Text>
         <TextInput
           style={styles.textBox}
@@ -63,6 +66,13 @@ export default class loginView extends Component {
           value={this.state.email}
           placeholder="juanito@gmail.com"
           keyboardType='email-address'
+        />
+        <Text>Nombre de usuario</Text>
+        <TextInput
+          style={styles.textBox}
+          onChangeText={(user) => this.setState({user})}
+          value={this.state.user}
+          placeholder="Usuario"
         />
         <Text>Contraseña</Text>
         <TextInput
@@ -72,16 +82,18 @@ export default class loginView extends Component {
           value={this.state.password}
           placeholder="contraseña"
         />
-        <Button
-          style={styles.button}
-          onPress={(this.handleSubmit)}
-          title="Iniciar sesión"
-          accessibilityLabel="Learn more about this purple button"
+        <Text>Confirmar contraseña</Text>
+        <TextInput
+          style={styles.textBox}
+          secureTextEntry={true}
+          onChangeText={(confirmPassword) => this.setState({confirmPassword})}
+          value={this.state.confirmPassword}
+          placeholder="confirmar contraseña"
         />
         <Button
           style={styles.button}
-          onPress={(this.register)}
-          title="Crear una cuenta"
+          onPress={(this.handleSubmit)}
+          title="Registrarme"
           accessibilityLabel="Learn more about this purple button"
         />
         <StatusBar style="auto" />
